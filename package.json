@@ -1,0 +1,24 @@
+{
+  "name": "bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "cheerio": "^1.0.0-rc.12",
+    "csvjson": "^5.1.0",
+    "csvtojson-converter": "^2.0.4",
+    "json2csv": "^5.0.7",
+    "request": "^2.88.2",
+    "unix-timestamp": "^1.0.2"
+  },
+  "devDependencies": {
+    "webpack-cli": "^4.10.0"
+  }
+}
