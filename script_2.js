@@ -20,25 +20,16 @@ const childProcess = require("child_process");
 const process = require("process");
 const fs = require("fs");
 const csv_lib = require("csvtojson-converter");
-const csvjson = require("csvjson");
 const json_to_csv = require("json2csv");
 const path = require("path");
-const request = require("request");
-const timestamp = require("unix-timestamp");
+const CSV_FIELDS = require("./constants/csv_field");
+const readCSVintoJSON = require("./utils/readCSVintoJSON");
 
 // Important : The month field of the Date starts from 0
 // Any commit before HACKATHON_START_DATE and after HACKATHON_END_DATE would be considered disqualified
 // Unix Epoch time of starting Hackathon Date and Ending Hackathon Date
 let HACKATHON_START_DATE = new Date(1995, 10, 29, 11, 0, 0).getTime() / 1000;
 let HACKATHON_END_DATE = new Date(2023, 11, 1, 9, 0, 0).getTime() / 1000;
-
-const CSV_FIELDS = {
-  TEAM_NAME: "Team Name",
-  SUBMISSION_URL: "Github Repository",
-  TRACKS: "Tracks",
-  CATEGORY: "Category",
-  QUALIFIED_OR_NOT: "Qualified Or Not", // It's a custom field
-};
 
 let PARAMS = {
   maxBuffer: 10000 * 10000, // Max Buffer size for stdout
@@ -50,20 +41,11 @@ let PARAMS = {
 let args = process.argv;
 args.splice(0, 2);
 
-const csvFilePath = path.join(__dirname, args[0]);
-
-const INPUT_CSV_DATA = fs.readFileSync(csvFilePath, {
-  encoding: "utf-8",
-  flag: "r",
-});
-
-const delimiter = ",";
-
 // Qualified has 3 values :
 // "Unresolved" => Haven't checked if the team qualifies or no idea
 // "Qualified" => Checked if the team qualifies and it's yes
 // "Not Qualified" => Checked if the team qualifies and it's no
-let GLOBAL_JSON = csv_lib.csvToJson(INPUT_CSV_DATA, delimiter);
+let GLOBAL_JSON = readCSVintoJSON(path.join(__dirname, args[0]));
 let DOUBLE_QUOTE_REMOVED_FROM_HEADING_JSON = [];
 
 GLOBAL_JSON.forEach((d) => {
@@ -180,16 +162,7 @@ const checkAllData = () => {
   });
 };
 
-checkAllData();
-
-
-
-
-
 // Delete the directory AxBxCxDxExFxGxYx if it's there because it's going to create conflicts
-
-
-
 
 const MAX_ITERATIONS = 1;
 let NO_OF_ITERATIONS = 0;
@@ -261,4 +234,3 @@ if (DISQUALIFIED_JSON.length != 0) {
   const DISQUALIFIED_CSV_PATH = __dirname + "/output/Disqualified.csv";
   fs.writeFileSync(DISQUALIFIED_CSV_PATH, DISQUALIFIED_CSV);
 }
-
