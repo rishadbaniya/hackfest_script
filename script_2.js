@@ -29,7 +29,7 @@ const timestamp = require("unix-timestamp");
 // Important : The month field of the Date starts from 0
 // Any commit before HACKATHON_START_DATE and after HACKATHON_END_DATE would be considered disqualified
 // Unix Epoch time of starting Hackathon Date and Ending Hackathon Date
-let HACKATHON_START_DATE = new Date(2023, 10, 29, 11, 0, 0).getTime() / 1000;
+let HACKATHON_START_DATE = new Date(2021, 10, 29, 11, 0, 0).getTime() / 1000;
 let HACKATHON_END_DATE = new Date(2023, 11, 1, 9, 0, 0).getTime() / 1000;
 
 const CSV_FIELDS = {
@@ -52,10 +52,10 @@ args.splice(0, 2);
 
 const csvFilePath = path.join(__dirname, args[0]);
 
-const INPUT_CSV_DATA = fs.readFileSync(csvFilePath,
-  {encoding:"utf-8", flag: "r"});
-
-
+const INPUT_CSV_DATA = fs.readFileSync(csvFilePath, {
+  encoding: "utf-8",
+  flag: "r",
+});
 
 const delimiter = ",";
 
@@ -77,32 +77,29 @@ GLOBAL_JSON.forEach((d) => {
 });
 GLOBAL_JSON = DOUBLE_QUOTE_REMOVED_FROM_HEADING_JSON;
 
-console.log(GLOBAL_JSON);
-
-/*
-
-
+// At this point csv is converted into json, now we have to check if the they have submitted the github url or not.
 let NO_OF_TEAMS = GLOBAL_JSON.length;
 let NO_OF_RESOLVED = 0;
 
 GLOBAL_JSON.forEach((data, i) => {
   if (
-    data["Qualified Or Not"] === "Qualified" ||
-    data["Qualified Or Not"] === "Disqualified"
+    data[CSV_FIELDS.QUALIFIED_OR_NOT] === "Qualified" ||
+    data[CSV_FIELDS.QUALIFIED_OR_NOT] === "Disqualified"
   ) {
   } else {
-    GLOBAL_JSON[i]["Qualified Or Not"] = "Unresolved";
+    GLOBAL_JSON[i][CSV_FIELDS.QUALIFIED_OR_NOT] = "Unresolved";
   }
 
   if (
-    data["GithubURL"] === "Not Submitted" ||
+    data[CSV_FIELDS.SUBMISSION_URL] === null ||
     data[CSV_FIELDS.TEAM_NAME] === "N/A"
   ) {
-    data["Qualified Or Not"] = "Disqualified";
+    data[CSV_FIELDS.QUALIFIED_OR_NOT] = "Disqualified";
   }
 });
 
-// Delete the directory AxBxCxDxExFxGxYx if it's there because it's going to create conflicts
+// console.log(GLOBAL_JSON);
+
 try {
   childProcess.execSync("yes | rm -r AxBxCxDxExFxGxYx", {
     stdin: [0, "ignore", "ignore"],
@@ -112,20 +109,30 @@ try {
 
 const checkAllData = () => {
   GLOBAL_JSON.forEach((data, index) => {
-    if (data["Qualified Or Not"] == "Unresolved") {
+    if (data[CSV_FIELDS.QUALIFIED_OR_NOT] == "Unresolved") {
       console.log(`Checking ${index + 1} of ${NO_OF_TEAMS}......`);
       try {
         // Naming the repository something complex, so that it doesn't cause
         // name conflict and cause issues while cloning
         let command = `git clone ${
-          data[CSV_FIELDS.GITHUB_URL]
+          data[CSV_FIELDS.SUBMISSION_URL]
         } AxBxCxDxExFxGxYx`;
-        console.log(data[CSV_FIELDS.GITHUB_URL]);
+        console.log(data[CSV_FIELDS.SUBMISSION_URL]);
         childProcess.execSync(command, PARAMS);
 
         // Reverse the log from the oldest and in YYYY-MM-DD format
-        let commit_history = childProcess.execSync(
+        let old_commit_history = childProcess.execSync(
           'git log --reverse --format="%at"',
+          {
+            encoding: "UTF-8",
+            cwd: "./AxBxCxDxExFxGxYx",
+            stdin: [0, "ignore", "ignore"],
+            shell: "sh",
+          }
+        );
+
+        let latest_commit_history = childProcess.execSync(
+          'git log --format="%at"',
           {
             encoding: "UTF-8",
             cwd: "./AxBxCxDxExFxGxYx",
@@ -135,19 +142,18 @@ const checkAllData = () => {
         );
         // TODO : Handle issues when the Repository is empty
         // Only gets the first commit of the reverse i.e the oldest commit
-        const OLDEST_COMMIT_DATE = parseInt(commit_history.slice(0, 10));
-
-        console.log(OLDEST_COMMIT_DATE);
+        const OLDEST_COMMIT_DATE = parseInt(old_commit_history.slice(0, 10));
+        const LATEST_COMMIT_DATE = parseInt(latest_commit_history.slice());
 
         if (
           OLDEST_COMMIT_DATE <= HACKATHON_START_DATE ||
-          OLDEST_COMMIT_DATE >= HACKATHON_END_DATE
+          LATEST_COMMIT_DATE >= HACKATHON_END_DATE
         ) {
           console.log("NOT QUALIFIED");
-          GLOBAL_JSON[index]["Qualified Or Not"] = "Disqualified";
+          GLOBAL_JSON[index][CSV_FIELDS.QUALIFIED_OR_NOT] = "Disqualified";
         } else {
           console.log("QUALIFIED");
-          GLOBAL_JSON[index]["Qualified Or Not"] = "Qualified";
+          GLOBAL_JSON[index][CSV_FIELDS.QUALIFIED_OR_NOT] = "Qualified";
         }
 
         // TODO : Make sure yes | rm -r AxBxCxDxExFxGxYx works on Windows default shell for execSync as well, coz this was only tested for "sh" shell,
@@ -173,6 +179,18 @@ const checkAllData = () => {
     }
   });
 };
+
+checkAllData();
+console.log(GLOBAL_JSON);
+
+/*
+
+
+
+// Delete the directory AxBxCxDxExFxGxYx if it's there because it's going to create conflicts
+
+
+
 
 const MAX_ITERATIONS = 10;
 let NO_OF_ITERATIONS = 0;
