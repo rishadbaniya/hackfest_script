@@ -30,7 +30,7 @@ const timestamp = require("unix-timestamp");
 // Any commit before HACKATHON_START_DATE and after HACKATHON_END_DATE would be considered disqualified
 // Unix Epoch time of starting Hackathon Date and Ending Hackathon Date
 let HACKATHON_START_DATE = new Date(2023, 10, 29, 11, 0, 0).getTime() / 1000;
-let HACKATHON_END_DATE = new Date(2022, 11, 1, 9, 0, 0).getTime() / 1000;
+let HACKATHON_END_DATE = new Date(2023, 11, 1, 9, 0, 0).getTime() / 1000;
 
 const CSV_FIELDS = {
   TEAM_NAME: "Team Name",
