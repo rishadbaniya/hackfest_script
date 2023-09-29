@@ -29,7 +29,7 @@ const timestamp = require("unix-timestamp");
 // Important : The month field of the Date starts from 0
 // Any commit before HACKATHON_START_DATE and after HACKATHON_END_DATE would be considered disqualified
 // Unix Epoch time of starting Hackathon Date and Ending Hackathon Date
-let HACKATHON_START_DATE = new Date(2021, 10, 29, 11, 0, 0).getTime() / 1000;
+let HACKATHON_START_DATE = new Date(1995, 10, 29, 11, 0, 0).getTime() / 1000;
 let HACKATHON_END_DATE = new Date(2023, 11, 1, 9, 0, 0).getTime() / 1000;
 
 const CSV_FIELDS = {
@@ -181,9 +181,8 @@ const checkAllData = () => {
 };
 
 checkAllData();
-console.log(GLOBAL_JSON);
 
-/*
+
 
 
 
@@ -192,7 +191,7 @@ console.log(GLOBAL_JSON);
 
 
 
-const MAX_ITERATIONS = 10;
+const MAX_ITERATIONS = 1;
 let NO_OF_ITERATIONS = 0;
 
 // Algorithm :
@@ -263,4 +262,3 @@ if (DISQUALIFIED_JSON.length != 0) {
   fs.writeFileSync(DISQUALIFIED_CSV_PATH, DISQUALIFIED_CSV);
 }
 
-*/
