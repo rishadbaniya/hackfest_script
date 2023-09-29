@@ -38,19 +38,10 @@ let HACKATHON_START_DATE = new Date(2022, 7, 5, 12, 0, 0).getTime() / 1000;
 let HACKATHON_END_DATE = new Date(2022, 7, 7, 9, 0, 0).getTime() / 1000;
 
 const CSV_FIELDS = {
-    FIRST_NAME: "First Name",
-    LAST_NAME: "Last Name",
-    TSHIRT_SIZE: "T-shirt Size",
-    GENDER: "Gender",
-    COLLEGE: "College",
-    EMAIL: "Email",
     TEAM_NAME: "Team Name",
-    DEVFOLIO_PROFILE: "Devfolio Profile",
-    SUBMISSION_URL: "Submission URL",
-    GITHUB_URL: "GithubURL",
+    SUBMISSION_URL: "Github Repository",
     TRACKS: "Tracks",
-    WINNERS: "Winners",
-    CUSTOM_QUESTIONS: "Custom Questions",
+    CATEGORY: "Category",
     QUALIFIED_OR_NOT: "Qualified Or Not" // It's a custom field
 };
 
