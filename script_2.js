@@ -47,10 +47,16 @@ let PARAMS = {
   shell: "sh",
 };
 
-const INPUT_CSV_DATA = fs.readFileSync(
-  __dirname + "/output/github_url_extracted.csv",
-  { encoding: "utf8", flag: "r" }
-);
+let args = process.argv;
+args.splice(0, 2);
+
+const csvFilePath = path.join(__dirname, args[0]);
+
+const INPUT_CSV_DATA = fs.readFileSync(csvFilePath,
+  {encoding:"utf-8", flag: "r"});
+
+
+
 const delimiter = ",";
 
 // Qualified has 3 values :
@@ -72,6 +78,9 @@ GLOBAL_JSON.forEach((d) => {
 GLOBAL_JSON = DOUBLE_QUOTE_REMOVED_FROM_HEADING_JSON;
 
 console.log(GLOBAL_JSON);
+
+/*
+
 
 let NO_OF_TEAMS = GLOBAL_JSON.length;
 let NO_OF_RESOLVED = 0;
@@ -235,3 +244,5 @@ if (DISQUALIFIED_JSON.length != 0) {
   const DISQUALIFIED_CSV_PATH = __dirname + "/output/Disqualified.csv";
   fs.writeFileSync(DISQUALIFIED_CSV_PATH, DISQUALIFIED_CSV);
 }
+
+*/
