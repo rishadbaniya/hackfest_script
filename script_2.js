@@ -28,7 +28,7 @@ const readCSVintoJSON = require("./utils/readCSVintoJSON");
 // Important : The month field of the Date starts from 0
 // Any commit before HACKATHON_START_DATE and after HACKATHON_END_DATE would be considered disqualified
 // Unix Epoch time of starting Hackathon Date and Ending Hackathon Date
-let HACKATHON_START_DATE = new Date(1995, 10, 29, 11, 0, 0).getTime() / 1000;
+let HACKATHON_START_DATE = new Date(2021, 10, 29, 11, 0, 0).getTime() / 1000;
 let HACKATHON_END_DATE = new Date(2023, 11, 1, 9, 0, 0).getTime() / 1000;
 
 let PARAMS = {
@@ -87,6 +87,10 @@ GLOBAL_JSON.forEach((data, i) => {
     data[CSV_FIELDS.TEAM_NAME] === "N/A"
   ) {
     data[CSV_FIELDS.QUALIFIED_OR_NOT] = "Disqualified";
+  }
+
+  if (data[CSV_FIELDS.OPT_IN_PRIZES] != null && data[CSV_FIELDS.TRACKS]) {
+    data[CSV_FIELDS.TRACKS] += "," + data[CSV_FIELDS.OPT_IN_PRIZES];
   }
 });
 

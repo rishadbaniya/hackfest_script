@@ -45,7 +45,7 @@ def format_with_and(lst):
 
 # Generate 50 dummy data entries
 dummy_data = []
-for _ in range(10):
+for _ in range(25):
     team_name = "Team " + "".join(random.choice("abcdefghijklmnopqrstuvwxyz") for _ in range(random.randint(4, 10)))
     github_repo = random.choice(random_github_repos)
     tracks = '"' + format_with_and(random.sample(tracks_options, random.randint(1, len(tracks_options)))) + '"'
