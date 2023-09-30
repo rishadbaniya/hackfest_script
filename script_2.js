@@ -60,6 +60,16 @@ GLOBAL_JSON.forEach((d) => {
 GLOBAL_JSON = DOUBLE_QUOTE_REMOVED_FROM_HEADING_JSON;
 
 // At this point csv is converted into json, now we have to check if the they have submitted the github url or not.
+
+GLOBAL_JSON.forEach((d) => {
+  // originalString.replace(new RegExp(wordToRemove, "g"), "");
+  // console.log(d[CSV_FIELDS.TEAM_NAME]);
+  d[CSV_FIELDS.TRACKS] = d[CSV_FIELDS.TRACKS].replace(" and", "");
+  console.log(d[CSV_FIELDS.TRACKS]);
+});
+
+// console.log(GLOBAL_JSON);
+
 let NO_OF_TEAMS = GLOBAL_JSON.length;
 let NO_OF_RESOLVED = 0;
 
